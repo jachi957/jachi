@@ -22,3 +22,203 @@ git push -u origin main
  origin  https://github.com/jachi957/test.git (fetch)===抓資料網址
 origin  https://github.com/jachi957/test.git (push)===上傳資料網址
 Microsoft 免驗證碼=
+什麼是版本控制系統（Version Control System）？
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+版本控制系統是一種軟體工程的開發技巧，可以透過這個系統讓每位成員的軟體版本可以方便同步和維護管理（不然要用 email 或是其他工具傳送和管理十分麻煩，尤其程式又常常會有不同版本修改的問題！）。在沒有版本控制系統時，我們常會在編輯檔案前複製一個備份，或是在更新檔案後產生許多重複檔案，非常不便且難以維護。因此，使用版本控制系統的需求就應運而生啦！
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+一般在軟體開發中又分為中央式系統（例如：Subversion、CVS 等）與分散式系統（例如：Git、BitKeeper、mercurial 等），中央式版本控制系統的工作主要在一個伺服器進行，由中央管理存取權限「鎖上」檔案庫中的檔案，一次只能讓一個開發者進行工作。而分散式系統讓不同開發者直接在各自的本地檔案庫工作，並容許多個開發者同時更動同一個檔案，而每個檔案庫有另外一個合併各個改變的功能。分散式系統讓開發者能在沒有網路的情況下也能繼續工作，也讓開發者有充分的版本控制能力，而不需經中央管理者的許可，但分散式系統仍然可以有檔案上鎖功能。
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+什麼是 Git？什麼是 Github？
+Git 是一個分散式版本控制軟體，最初由 Linus Torvalds 創作（也是作業系統 Linux 系統的開發者），其最初目的是為更好地管理 Linux kernel 開發而設計，其具備優秀的 merge tracing 合併程式碼的能力（使用程式碼 snapshot 來比較歷史版本差異）。
+
+Github 則是一個支援 git 程式碼存取和遠端托管的平台服務，有許多的開放原始碼的專案都是使用 Github 進行程式碼的管理。若是讀者未來有志於從事程式設計相關工作的話，建議可以熟悉掌握 Git 和 Github 的使用，並建立自己的 Github profile 作品集。
+
+Git 基本觀念
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+Git 可以分為 Local（本地）和 Remote（遠端）兩個環境，由於 Git 屬於分散式的版本控制系統，所以開發者可以在離線 local 環境下開發，等到有網路時再將自己的程式推到 Remote 環境或 pull 下其他開發者程式碼進行整合。在 Local 中我們又分為 working directory（工作資料夾）、staging area（暫存區）和 repositories（檔案庫）。
+
+當自己開發時會在工作資料夾工作，當要進入檔案庫之前會先將檔案加入暫存區，確認沒問題則 commit 到檔案庫中，最後 push 上去 remote 環境。在 Git 中若是有和其他開發者一起合作，則會需要處理不同 branch 之間 conflict 和 merge 的問題。
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+Git 與 Github 實戰操作入門教學
+接下來我們用一個實際的實戰範例讓讀者可以快速的掌握那些基礎必知必會的 Git/Github 操作技能：
+
+安裝並且設定 Git
+
+任務 1：安裝 Git 到你的電腦上，並且設定好 Git 內部的使用者名稱和電子信箱
+
+Linux 若是使用 Debian 基礎的作業系統可以在終端機輸入以下指令安裝 git：
+
+ $ apt-get install git
+若是 Fedora 系列可以輸入：
+
+ $ yum install git-core
+若是 windows 可以下載安裝 cmder 這個模擬 Linux terminal 終端機時選擇完整版本就會順便安裝或是到 Git 官網安裝。當然在市面上有許多免費 GUI 圖形化的 Git 操作軟體，若是初學者則建議先熟悉整個 git 工作模式和指令，再去使用圖形化工具會比較好，這樣你才比較知道圖形化程式背後做了什麼事情。Mac 則是可以到 Git 官方網站 選擇對應作業系統，按照步驟完整下載安裝。另外也可以參考中文安裝教學。
+
+由於我們會選擇 Github 當作遠端托管程式的環境，所以我們也可以根據作業系統安裝 Github 桌面版當作操作工具（內建安裝 Git）。
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+若是安裝完成，打開終端機（terminal）或 cmder 輸入以下指令，若成功顯示版本（建議 Git 版本在 2 以上），代表安裝成功囉！terminal（終端機）是一個可以下指令讓電腦做事情的互動介面（例如：新增檔案、移動到資料夾等）
+
+ // 其中 $ 為提示字元，在輸入指令時不用輸入該符號，否則會錯誤，若是使用 windows cmder 預設是 λ
+ $ git --version
+接下來設定你的帳戶，讓 Git 知道這台電腦做的修改要連結到哪一個使用者（待會我們要在 Github 上註冊帳號，建議使用一致的帳號和電子信箱）：
+
+ $ git config --global user.name "<Your Name>"
+設定電子郵件：
+
+ $ git config --global user.email "<your@gmail.com>"
+建立一個本機的 repository
+
+任務二：在自己的電腦上建立一個新的 local repositories（本地檔案庫）
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+repository（檔案庫）是一個什麼樣的概念呢？事實上 repository 就是一個專案，又簡稱 repo。以電腦的檔案資料管理來看，我們通常會把同一個專案的資料放到同一個資料夾下，所以我們也可以把 repository 看成一個資料夾。
+
+ // 建立一個 hello-git 資料夾
+ $ mkdir hello-git
+ // 移動到 hello-git 資料夾
+ $ cd hello-git
+ // 將專案資料夾建立成 git repository
+ $ git init
+ // 列出專案資料夾下的檔案和資料夾（-l 參數為列出詳細資料，-a 為列出隱藏資料夾）
+ $ ls -la
+當你執行 git init 後，你可以發現多出了 .git 這個隱藏資料夾，可以看到裡面檔案和資料夾如下：
+
+自學程式設計與電腦科學入門實戰：Git 與 Github 版本控制基本指令與操作入門教學
+
+到這邊恭喜讀者，完成你第一個 git 專案資料夾改造計畫！
+
+檢視狀態、新增或修改 commits
+
+任務三：在你的 repository 檔案庫中建立一個新檔案，新增一些內容到該檔案並且將那些檔案修改提交 commit 到 Git 中
+
+接著我們使用文字編輯器，新增一個 hello.py 的檔案（裡面是一個會印出 hello python & git 字串的 python 程式）：
+======================================================================================================================
+https://confluence.atlassian.com/bitbucketserver/basic-git-commands-776639767.html
+====================================================================================================================
+Basic Git commands
+Related content
+Git resources
+Download an archive from Bitbucket Server
+Setting a system-wide default branch name
+Commit and push changes to Bitbucket Server
+Integrating Bitbucket Server with Atlassian applications
+Clone your repository and manage files locally
+Push logs
+Workflow strategies in Bitbucket Server
+Audit log events in Bitbucket
+Jira integration
+Still need help?
+The Atlassian Community is here for you.
+
+Ask the community
+
+Here is a list of some basic Git commands to get you going with Git.
+
+For more detail, check out the  Atlassian Git Tutorials  for a visual introduction to Git commands and workflows, including examples.
+
+ 
+
+Git task	Notes	Git commands
+Tell Git who you are	Configure the author name and email address to be used with your commits.
+Note that Git strips some characters (for example trailing periods) from user.name.
+
+git config --global user.name "Sam Smith"
+git config --global user.email sam@example.com
+
+Create a new local repository	 	
+git init
+Check out a repository	Create a working copy of a local repository:	
+git clone /path/to/repository
+For a remote server, use:	
+git clone username@host:/path/to/repository
+Add files	Add one or more files to staging (index):	
+git add <filename>
+
+git add *
+Commit	Commit changes to head (but not yet to the remote repository):	
+git commit -m "Commit message"
+Commit any files you've added with git add, and also commit any files you've changed since then:	
+git commit -a
+Push	Send changes to the master branch of your remote repository:	
+git push origin master
+Status	List the files you've changed and those you still need to add or commit:	
+git status
+Connect to a remote repository	If you haven't connected your local repository to a remote server, add the server to be able to push to it:	git remote add origin <server>
+List all currently configured remote repositories:	git remote -v
+Branches	Create a new branch and switch to it:	
+git checkout -b <branchname>
+Switch from one branch to another:	
+git checkout <branchname>
+List all the branches in your repo, and also tell you what branch you're currently in:	
+git branch
+Delete the feature branch:	
+git branch -d <branchname>
+Push the branch to your remote repository, so others can use it:	
+git push origin <branchname>
+Push all branches to your remote repository:	
+git push --all origin
+Delete a branch on your remote repository:	
+git push origin :<branchname>
+Update from the remote repository	Fetch and merge changes on the remote server to your working directory:	git pull
+To merge a different branch into your active branch:	
+git merge <branchname>
+View all the merge conflicts:
+View the conflicts against the base file:
+
+Preview changes, before merging:
+
+git diff
+git diff --base <filename>
+
+git diff <sourcebranch> <targetbranch>
+After you have manually resolved any conflicts, you mark the changed file:	
+git add <filename>
+Tags	You can use tagging to mark a significant changeset, such as a release:	
+git tag 1.0.0 <commitID>
+CommitId is the leading characters of the changeset ID, up to 10, but must be unique. Get the ID using:	
+git log
+Push all tags to remote repository:	
+git push --tags origin
+Undo local changes	If you mess up, you can replace the changes in your working tree with the last content in head:
+Changes already added to the index, as well as new files, will be kept.
+
+git checkout -- <filename>
+Instead, to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it, do this:	
+git fetch origin
+
+git reset --hard origin/master
+Search	Search the working directory for foo():	git grep "foo()"
+Last modified on Sep 21, 2017
+Was this helpful?
+
+Yes
+No
+Provide feedback about this article
+Related content
+Git resources
+Download an archive from Bitbucket Server
+Setting a system-wide default branch name
+Commit and push changes to Bitbucket Server
+Integrating Bitbucket Server with Atlassian applications
+Clone your repository and manage files locally
+Push logs
+Workflow strategies in Bitbucket Server
+Audit log events in Bitbucket
+Jira integration
+Powered by Confluence and Scroll Viewport.
+Atlassian
+Privacy policy
+Terms of use
+Security
+c 2020 Atlass
